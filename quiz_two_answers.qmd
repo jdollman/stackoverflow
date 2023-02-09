@@ -1,0 +1,112 @@
+---
+title: "Quiz 2 (Answers)"
+format: 
+  pdf:
+    echo: false
+    message: false
+    warning: false
+editor: source
+---
+
+```{r}
+library(janitor)
+library(kableExtra)
+library(glue)
+library(tidyverse)
+
+d <- read.csv('presidential-senate-voting.csv')
+
+m <- function(year){
+  d %>%
+  filter(year == {{year}}) %>% 
+  mutate(senate_win = str_to_title(senate_win),
+         pres_win = str_to_title(pres_win)) %>% 
+  select(year, President = pres_win, Senate = senate_win) %>% 
+  tabyl(Senate, President, year) %>% 
+  adorn_title("combined") %>% 
+  kable(caption = paste0('Voting in the ', {{year}}, ' election')) %>% 
+  kable_classic(full_width = F)
+}
+```
+
+## Question 1
+
+Below is some chill information about two elections forty years apart, the 1976 and the 2016 elections. In each table the rows break down the party of the senator that state elected and the columns break down the presidential vote. Just to make sure we're on the same page, let's go over a couple numbers from the 1976 table. **1** state voted for a senator that was neither a Republican nor a Democrat and that state went for the Republican president. **9** states sent a Democrat to the Senate while sending Republican electors to the Electoral College.^[You may find it helpful to rewrite the tables on a piece of paper, writing "Senate Choice" vertically to the left of the table and "Presidential Choice" above the table, omitting the `Senate/President` cell.]
+
+```{r}
+m(1976)
+m(2016)
+```
+
+\newpage
+
+(a) Why do the numbers not add up to 50?^[This is neither a statistics nor experiments question, but it is something you basically have to know if you're taking classes in political science.]
+(b) What is this way of displaying information called?
+(c) Just looking at 1976, how many Republicans were sent to the Senate? How many Democrats?
+(d) Still just looking at 1976, what are $\text{Pr}(\text{republican senator} \mid \text{republican president})$ and $\text{Pr}(\text{republican president} \mid \text{republican senator})$? Are they different?
+(e) How does the quantity $\text{Pr}(\text{dem senator} \mid \text{dem president})$ change from 1976 to 2016?
+
+\newpage
+
+## Question 2
+
+(from Chapter 3 of *Thinking Clearly with Data*)
+
+In the 2016 U.S. Open golf tournament, Dustin Johnson was leading the tournament in the final round, and his ball was resting on the fifth green. While preparing for his upcoming putt, he tapped his putter on the ground next to the ball and the ball moved. The rules at the time stated that if we were highly certain that a player caused his ball to move, even if it was inadvertent, he or she should incur a penalty. Because you're an expert on causation, the rules officials call you in to evaluate the situation. The officials make the following arguments. Please provide your expert response to each one.
+
+(a) Johnson couldn't have possibly caused the ball to move, because he (and his putter) never touched it.
+(b) Johnson shouldn't receive a penalty because the true cause of the ball moving was the greenskeeper. Had the greenskeeper not cut and rolled the greens so much that morning, the ball wouldn't have moved.
+(c) An empirically minded official went out to the same green, placed a ball down, tapped his putter on the ground next to the ball, and it didn't move. Therefore, Johnson's actions couldn't have caused the ball to move.
+(d) One official was watching the incident up close and says he's virtually certain that if Johnson had not tapped his putter next to the ball, it wouldn't have moved. Therefore, he caused it to move and should receive a penalty.
+
+Answers:
+
+(a) This is obviously fallacious. Here's a situation we've probably all encounted (unfortunately). There's a drink on a wobbly table. You push or otherwise upset the table and then the drink spills. You never touch the drink, but it's pretty obvious you caused it to spill. I've done this.
+(b) This also seems wrong. If you can't see why, look for "proximate cause" in chapter 3.
+(c) This is getting closer, but it also might not be right. There is no practical way this 'empircally minded official' could recreate Dustin Johnson's exact situation. And it's possible that when official hits the ground with his putter it doesn't cause his ball to move even though Dustin's putter caused his ball to move.
+(d) The *logic* of this official is correct. *How* he knows what would have happened if Dustin didn't tap is a mystery, though.
+
+\newpage
+
+## Question 3
+
+Imagine you had to explain to an interested friend or relative the difference between an outcome and a potential outcome. Try to not only define the terms, but give an example of your own. Further imagine that this relative or friend would subsequently check the internet to make sure that your example truly is *your* example 🕵🤨🔍
+
+\newpage
+
+## Question 4
+
+Below is a screenshot of a man (or at least a Twitter user posing as a man)^[Or perhaps the Twitter poster is the baby] using humor to express frustration that his $p$-value (yes, that number is a $p$-value) has the value shown. After the lecture on statistical inference, you should be able to surmise the source of his chagrin. What is it?
+
+![](../../resources/p-value-argh.png){fig-align="center" width="60%"}
+
+\newpage
+
+## Question 5
+
+In chapter 2 the authors of *Thinking Clearly with Data* discussed the differences between statements about correlations and other factual statements that do not convey information about a correlation. Now that you have a deeper understanding that correlation requires variation, consider the following statements. Which ones describe a correlation, and which ones do not?
+
+(a) Most top-performing schools have small student bodies.
+(b) Married people are typically happier than unmarried people.
+(c) Among professionals, taller basketball players tend to have lower free-throw percentages than shorter players.
+(d) The locations in the United States with the highest cancer rates are typically small towns.
+(e) Older houses are more likely to have lead paint than newer ones.
+(f) Most colds caught in Cook County are caught on cold days. (This one also doubles as a tongue twister.)
+
+Answers:
+
+(a) No correlation because there's no contrast with schools that aren't top-performing.
+(b) Yes.
+(c) Yes.
+(d) Oh, this one's tricky. Let's make it extra credit. Why? Note that it doesn't even say that small towns have high cancer rates on average. It just says that the the locations with the highest cancer rates are typically small towns. Why? Two reasons. They're smaller, so they're more likely to be outliers (in a big city you have such a large 'sample' that the cancer rate is basically the national average cancer rate, but if randomly 12 people in a town of 100 get cancer, they're going to have an extremely high cancer rate). Secondly, there are just so many more small towns than cities. It's as if small towns has more 'attempts' to get the record of highest cancer rate.
+(e) Yes.
+(f) Yes, and it's because of the contrast contained in "most colds..." *Most colds* are caught on cold days implies necessarily that *fewer colds* are caught on warmer days.
+
+\newpage
+
+## Question 6
+
+![from xkcd.com](../../resources/correlation.png){fig-align='center'}
+
+Regardless of your feelings about it, the comic strip above is intended to be funny. What's joke? In explaining it, use (a) relevant concept(s) from class.
+
